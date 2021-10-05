@@ -39,7 +39,6 @@ def getCrossovers(sma1, sma2):
     # Insert a non-crossover point at the first index
     arr1.insert(1, 0)
     
-    # ax.plot(range(len(sma15)), arr1, label='arr1')
     return arr1
 
 #Find the locations of 1's and -1's, these are the crossovers
@@ -54,12 +53,14 @@ def main():
     sma15, sma50 = balanceLengths(sma15, sma50)
     crossovers = getCrossovers(sma15, sma50)  
 
-# fig, ax = plt.subplots()
-# ax.plot(range(len(sma15)), sma15, label='sma15')
-# ax.plot(range(len(sma15)), sma50, label='sma50')
-# ax.set_xlabel('days')
-# ax.set_ylabel('price')
-# ax.legend()
+    fig, ax = plt.subplots()
+    ax.plot(range(len(sma15)), sma15, label='sma15')
+    ax.plot(range(len(sma15)), sma50, label='sma50')
+    ax.plot(range(len(sma15)), crossovers, label='cross')
+
+    ax.set_xlabel('days')
+    ax.set_ylabel('price')
+    ax.legend()
 
     
 if __name__ == "__main__":
