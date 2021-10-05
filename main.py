@@ -6,6 +6,7 @@ matplotlib.use('Qt5Agg')
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 import random
+import csv
 
 qtCreatorFile = "gui.ui"
 Ui_MainWindow, QtBaseClass = uic.loadUiType(qtCreatorFile)
@@ -69,7 +70,21 @@ class Main(QMainWindow, Ui_MainWindow):
     
     # Parse csv and pass data into x data and y data and plot initiate graph
     def loadCsv(self):
+        fileName = self.fileNameInput.text()
+        y, x = [], []
+        with open(fileName) as csv_file:
+            csv_reader = csv.reader(csv_file, delimiter=',')
+            line_count = 0
+            for row in csv_reader:
+                if line_count == 0:
+                    line_count += 1
+                    continue
+                y.append(float(row[5]))
+                x.append(row[0])
+        self.y = y
+        self.x = x
         self.updateChart()
+        
             
 
 if __name__ == "__main__":
