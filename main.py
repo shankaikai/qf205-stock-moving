@@ -15,13 +15,14 @@ matplotlib.use('Qt5Agg')
 qtCreatorFile = "gui.ui"
 Ui_MainWindow, QtBaseClass = uic.loadUiType(qtCreatorFile)
 
+### NOTES FOR REFERENCE ###
 '''
 Object names:
 fileNameInput
 dateRangeInput
 loadCsvButton
-startDateInput
-endDateInput
+startDateCombo
+endDateCombo
 sma1CheckBox
 sma2CheckBox
 sma1Input
@@ -30,6 +31,8 @@ updateButton
 
 Grab text e.g. self.fileNameInput.text()
 Grab checkbox e.g. self.sma1CheckBox.isChecked()
+Add item to combo box (dropdown) e.g. self.startDateCombo.addItem('11/10/2020')
+Get text from combo box e.g. self.startDateCombo.currentText()
 '''
 
 
@@ -51,11 +54,10 @@ class Main(QMainWindow, Ui_MainWindow):
         # Data from CSV parsing
         self.y = [random.randint(0, 300) for i in range(5)]  # placeholder
         self.x = ["Jan", "Feb", "Mar", "April", "May"]  # placeholder
-
+        
         self.show()
 
     # When the Update Window button is clicked
-
     def updateChart(self):
 
         # TODO: assign close data to self.closeData
@@ -118,6 +120,13 @@ class Main(QMainWindow, Ui_MainWindow):
         self.x = x
         print(x)
         print(y)
+
+        # TODO: Set the start and end date of the CSV
+        self.dateRangeInput.setText('insert date here') #placeholder
+
+        # TODO: Populate startDateCombo and endDateCombo
+        self.startDateCombo.addItem('date')
+
         self.updateChart()
 
 

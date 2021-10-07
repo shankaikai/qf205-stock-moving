@@ -101,13 +101,19 @@ color: rgb(193,196,200);
               <height>30</height>
              </size>
             </property>
+            <property name="cursor">
+             <cursorShape>ForbiddenCursor</cursorShape>
+            </property>
             <property name="styleSheet">
              <string notr="true">background-color: rgb(46, 60, 74);
 color: rgb(193,196,200);
 </string>
             </property>
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
             <property name="placeholderText">
-             <string>e.g. 2015-07-01 to 2017-07-07</string>
+             <string>The date range of your CSV files will be shown here</string>
             </property>
            </widget>
           </item>
@@ -172,22 +178,6 @@ font-weight: bold;
           <enum>QFrame::Raised</enum>
          </property>
          <layout class="QGridLayout" name="gridLayout_3">
-          <item row="0" column="1">
-           <widget class="QDateEdit" name="startDateInput">
-            <property name="styleSheet">
-             <string notr="true">background-color: rgb(46, 60, 74);
-color: rgb(193,196,200);</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1">
-           <widget class="QDateEdit" name="endDateInput">
-            <property name="styleSheet">
-             <string notr="true">background-color: rgb(46, 60, 74);
-color: rgb(193,196,200);</string>
-            </property>
-           </widget>
-          </item>
           <item row="0" column="0">
            <widget class="QLabel" name="startDateLabel">
             <property name="focusPolicy">
@@ -227,6 +217,36 @@ font-weight: bold;
             </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QComboBox" name="startDateCombo">
+            <property name="minimumSize">
+             <size>
+              <width>70</width>
+              <height>30</height>
+             </size>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(46, 60, 74);
+color: rgb(193,196,200);
+</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QComboBox" name="endDateCombo">
+            <property name="minimumSize">
+             <size>
+              <width>70</width>
+              <height>30</height>
+             </size>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(46, 60, 74);
+color: rgb(193,196,200);
+</string>
             </property>
            </widget>
           </item>
