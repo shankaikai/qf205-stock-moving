@@ -60,25 +60,25 @@ def getSMAPlots(closeData, window1, window2):
     return sma1, sma2, crossBuy, crossSell
 
 
-def main():
-    df = pd.read_csv("PLTR.csv")  # this is received from API
+# def main():
+#     df = pd.read_csv("PLTR.csv")  # this is received from API
 
-    closeData = df["Close"]
+#     closeData = df["Close"]
 
-    sma15 = getMovingAverage(closeData, 15)
-    sma50 = getMovingAverage(closeData, 50)
+#     sma15 = getMovingAverage(closeData, 15)
+#     sma50 = getMovingAverage(closeData, 50)
 
-    sma15, sma50 = balanceLengths(sma15, sma50)
-    crossovers = getCrossovers(sma15, sma50)
+#     sma15, sma50 = balanceLengths(sma15, sma50)
+#     crossovers = getCrossovers(sma15, sma50)
 
-    # fig, ax = plt.subplots()
-    # ax.plot(range(len(sma15)), sma15, label='sma15')
-    # ax.plot(range(len(sma15)), sma50, label='sma50')
-    # ax.plot(range(len(sma15)), crossovers, label='cross')
+#     # fig, ax = plt.subplots()
+#     # ax.plot(range(len(sma15)), sma15, label='sma15')
+#     # ax.plot(range(len(sma15)), sma50, label='sma50')
+#     # ax.plot(range(len(sma15)), crossovers, label='cross')
 
-    # ax.set_xlabel('days')
-    # ax.set_ylabel('price')
-    # ax.legend()
+#     # ax.set_xlabel('days')
+#     # ax.set_ylabel('price')
+#     # ax.legend()
 
 
 if __name__ == "__main__":
