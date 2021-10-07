@@ -53,13 +53,8 @@ class Main(QMainWindow, Ui_MainWindow):
         self.sma2CheckBox.stateChanged.connect(self.updateChart)
 
         # Data from CSV parsing
-        self.df = pd.read_csv("CSV files\PLTR.csv")  # placeholder
-        self.closeData = self.df["Close"]  # placeholder
-        self.datesData = self.df["Date"]   # placeholder
-        self.y = self.closeData
-        self.x = self.datesData
-        # self.y = [random.randint(0, 300) for i in range(5)]  # placeholder
-        # self.x = ["Jan", "Feb", "Mar", "April", "May"]  # placeholder
+        self.y = pd.DataFrame()
+        self.x = pd.DataFrame()
 
         self.show()
 
@@ -71,7 +66,7 @@ class Main(QMainWindow, Ui_MainWindow):
         # df.rename(columns={'Adj Close': 'Adj_Close'}, inplace=True)
 
         sma1, sma2, crossBuy, crossSell = SMA.getSMAPlots(
-            self.closeData, int(self.sma1Input.text()), int(self.sma2Input.text()))
+            self.y, int(self.sma1Input.text()), int(self.sma2Input.text()))
 
         sma1, self.x = SMA.balanceLengths(
             sma1, self.x)
@@ -134,39 +129,26 @@ class Main(QMainWindow, Ui_MainWindow):
     def loadCsv(self):
 
         fileName = self.fileNameInput.text()
-        y, x = [], []  # Data for y and x
-        with open(fileName) as csv_file:
-            csv_reader = csv.reader(csv_file, delimiter=',')
-            line_count = 0
-            for row in csv_reader:
-                if line_count == 0:
-                    line_count += 1
-                    continue
 
-                y.append(float(row[5]))
-                x.append(row[0])
+        if self.fileNameInput.text():
+            df = pd.read_csv(fileName)
+            y = df["Adj Close"]
+            x = df["Date"]
+            
+            startDate = x.iloc[0]
+            endDate = x.iloc[-1]
+            
+            self.dateRangeInput.setText(str(startDate) + ' to ' + str(endDate))
+            
+            for date in x:
+                self.startDateCombo.addItem(date)
+                self.endDateCombo.addItem(date)
+            
+            self.y = y
+            self.x = x
+            # TODO: set startDateCombo to first date and endDateCombo to last date
+            
 
-        if self.dateRangeInput.text():
-            dateRange = self.dateRangeInput.text().split(' to ')
-            if dateRange[0] in x:
-                startIndex = x.index(dateRange[0])
-            # else: do comparison
-            if dateRange[1] in x:
-                endIndex = x.index(dateRange[1])
-                # else: do comparison
-            x = x[startIndex:endIndex + 1]
-            y = y[startIndex:endIndex + 1]
-
-        self.y = y
-        self.x = x
-        print(x)
-        print(y)
-
-        # TODO: Set the start and end date of the CSV
-        self.dateRangeInput.setText('insert date here')  # placeholder
-
-        # TODO: Populate startDateCombo and endDateCombo
-        self.startDateCombo.addItem('date')
 
         self.updateChart()
 
