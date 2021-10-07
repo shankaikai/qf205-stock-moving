@@ -140,13 +140,14 @@ class Main(QMainWindow, Ui_MainWindow):
             
             self.dateRangeInput.setText(str(startDate) + ' to ' + str(endDate))
             
-            for date in x:
-                self.startDateCombo.addItem(date)
-                self.endDateCombo.addItem(date)
+            
+            self.startDateCombo.addItems(x)
+            self.endDateCombo.addItems(x)
+            self.endDateCombo.setCurrentIndex(len(x) - 1)
             
             self.y = y
             self.x = x
-            # TODO: set startDateCombo to first date and endDateCombo to last date
+
             
 
 
