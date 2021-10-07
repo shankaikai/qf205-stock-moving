@@ -45,6 +45,21 @@ def getCrossovers(sma1, sma2):
 # Find the locations of 1's and -1's, these are the crossovers
 
 
+def getSMAPlots(closeData, window1, window2):
+    sma1 = getMovingAverage(closeData, window1)
+    sma2 = getMovingAverage(closeData, window2)
+
+    sma1, sma2 = balanceLengths(sma1, sma2)
+    crossovers = getCrossovers(sma1, sma2)
+    if window1 < window2:
+        crossBuy = [1 if x == 1 else 0 for x in crossovers]
+        crossSell = [-1 if x == 1 else 0 for x in crossovers]
+    else:
+        crossSell = [1 if x == 1 else 0 for x in crossovers]
+        crossBuy = [-1 if x == 1 else 0 for x in crossovers]
+    return sma1, sma2, crossBuy, crossSell
+
+
 def main():
     df = pd.read_csv("PLTR.csv")  # this is received from API
 
