@@ -57,11 +57,18 @@ class Main(QMainWindow, Ui_MainWindow):
     # When the Update Window button is clicked
 
     def updateChart(self):
+
+        # TODO: assign close data to self.closeData
         df = pd.read_csv("PLTR.csv")  # placeholder
         self.closeData = df["Close"]  # placeholder
 
         sma1, sma2, crossBuy, crossSell = SMA.getSMAPlots(
             self.closeData, int(self.sma1Input.text()), int(self.sma2Input.text()))
+
+        # sma1 and sma2 are already the same size
+        # crossBuy is an array of 0s and 1s, 1 is the point to buy
+        # crossSell is an array of 0s and -1s, -1 is the point to sell
+        # print(crossBuy, crossSell)
 
         # TODO: put sma1, sma2, crossBuy, crossSell into graph
 
