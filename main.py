@@ -1,11 +1,14 @@
 import sys
 from PyQt5.QtWidgets import QMainWindow, QApplication, QVBoxLayout
+from PyQt5.QtGui import QIcon
 from PyQt5 import uic
 import matplotlib
 matplotlib.use('Qt5Agg')
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 import random
+import csv
+from datetime import datetime
 
 qtCreatorFile = "gui.ui"
 Ui_MainWindow, QtBaseClass = uic.loadUiType(qtCreatorFile)
@@ -47,6 +50,8 @@ class Main(QMainWindow, Ui_MainWindow):
         self.y = [random.randint(0, 300) for i in range(5)] # placeholder
         self.x = ["Jan", "Feb", "Mar", "April", "May"] # placeholder
         
+        self.show()
+        
     
     # When the Update Window button is clicked
     def updateChart(self):
@@ -69,12 +74,44 @@ class Main(QMainWindow, Ui_MainWindow):
     
     # Parse csv and pass data into x data and y data and plot initiate graph
     def loadCsv(self):
+        
+        fileName = self.fileNameInput.text()
+        y, x = [], [] # Data for y and x
+        with open(fileName) as csv_file:
+            csv_reader = csv.reader(csv_file, delimiter=',')
+            line_count = 0
+            for row in csv_reader:
+                if line_count == 0:
+                    line_count += 1
+                    continue
+                
+                y.append(float(row[5]))
+                x.append(row[0])
+        
+        if self.dateRangeInput.text():
+            dateRange = self.dateRangeInput.text().split(' to ')
+            if dateRange[0] in x:
+                startIndex = x.index(dateRange[0])
+            # else: do comparison
+            if dateRange[1] in x: 
+                endIndex = x.index(dateRange[1])
+                # else: do comparison
+            x = x[startIndex:endIndex + 1]
+            y = y[startIndex:endIndex + 1]
+        
+        self.y = y
+        self.x = x
+        print(x)
+        print(y)
         self.updateChart()
+        
             
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     main = Main()
+    main.setWindowIcon(QIcon('icon.png'))
+    main.setWindowTitle('Stock Chart & Moving Average Crossover')
     main.show()
     try: 
         sys.exit(app.exec_())
