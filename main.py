@@ -53,8 +53,13 @@ class Main(QMainWindow, Ui_MainWindow):
         self.sma2CheckBox.stateChanged.connect(self.updateChart)
 
         # Data from CSV parsing
-        self.y = [random.randint(0, 300) for i in range(5)]  # placeholder
-        self.x = ["Jan", "Feb", "Mar", "April", "May"]  # placeholder
+        self.df = pd.read_csv("CSV files\PLTR.csv")  # placeholder
+        self.closeData = self.df["Close"]  # placeholder
+        self.datesData = self.df["Date"]   # placeholder
+        self.y = self.closeData
+        self.x = self.datesData
+        # self.y = [random.randint(0, 300) for i in range(5)]  # placeholder
+        # self.x = ["Jan", "Feb", "Mar", "April", "May"]  # placeholder
 
         self.show()
 
@@ -62,23 +67,36 @@ class Main(QMainWindow, Ui_MainWindow):
     def updateChart(self):
 
         # TODO: assign close data to self.closeData
-        df = pd.read_csv("PLTR.csv")  # placeholder
-        df.rename(columns={'Adj Close': 'Adj_Close'}, inplace=True)
-        self.closeData = df["Close"]  # placeholder
+
+        # df.rename(columns={'Adj Close': 'Adj_Close'}, inplace=True)
 
         sma1, sma2, crossBuy, crossSell = SMA.getSMAPlots(
             self.closeData, int(self.sma1Input.text()), int(self.sma2Input.text()))
 
-        crossBuy = [0]*(len(self.x) - len(crossBuy)) + crossBuy
-        crossSell = [0]*(len(self.x) - len(crossSell)) + crossSell
+        sma1, self.x = SMA.balanceLengths(
+            sma1, self.x)
+
+        sma2, self.x = SMA.balanceLengths(
+            sma2, self.x)
+
+        crossBuy, self.x = SMA.balanceLengths(
+            crossBuy, self.x)
+
+        crossSell, self.x = SMA.balanceLengths(
+            crossSell, self.x)
+
+        print("lengths", len(sma1), len(sma2), len(self.x), len(self.y))
+
+        # crossBuy = [0]*(len(self.x) - len(crossBuy)) + crossBuy
+        # crossSell = [0]*(len(self.x) - len(crossSell)) + crossSell
 
         # sma1 and sma2 are already the same size
         # crossBuy is an array of 0s and 1s, 1 is the point to buy
         # crossSell is an array of 0s and -1s, -1 is the point to sell
         # print(crossBuy, crossSell)
 
-        rolling_mean = df.Adj_Close.rolling(window=15).mean()
-        rolling_mean2 = df.Adj_Close.rolling(window=50).mean()
+        # rolling_mean = df.Adj_Close.rolling(window=15).mean()
+        # rolling_mean2 = df.Adj_Close.rolling(window=50).mean()
 
         # TODO: put sma1, sma2, crossBuy, crossSell into graph
 
@@ -87,11 +105,11 @@ class Main(QMainWindow, Ui_MainWindow):
 
         if self.sma1CheckBox.isChecked():
             self.MplWidget.canvas.axes.plot(
-                self.x, rolling_mean, label='15 Day SMA', color='orange')  # placeholder
+                self.x, sma1, label='15 Day SMA', color='orange')  # placeholder
 
         if self.sma2CheckBox.isChecked():
             self.MplWidget.canvas.axes.plot(
-                self.x, rolling_mean2, label='50 Day SMA', color='magenta')  # placeholder
+                self.x, sma2, label='50 Day SMA', color='magenta')  # placeholder
 
         if self.sma1CheckBox.isChecked() and self.sma2CheckBox.isChecked():
             self.MplWidget.canvas.axes.plot(self.x, crossBuy)
@@ -99,12 +117,12 @@ class Main(QMainWindow, Ui_MainWindow):
             buy_idx = [i for i, e in enumerate(crossBuy) if e == 1]
             for i in buy_idx:
                 self.MplWidget.canvas.axes.plot(
-                    self.x[i], rolling_mean[i], 'go')
+                    self.x[i], sma1[i], 'go')
 
             sell_idx = [i for i, e in enumerate(crossSell) if e == -1]
             for i in sell_idx:
                 self.MplWidget.canvas.axes.plot(
-                    self.x[i], rolling_mean[i], 'ro')
+                    self.x[i], sma1[i], 'ro')
 
         self.MplWidget.canvas.axes.legend(('Close', self.sma1Input.text(
         ) + 'd', self.sma2Input.text() + 'd'), loc='upper right')

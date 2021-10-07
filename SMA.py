@@ -18,8 +18,10 @@ def getMovingAverage(data, window=int):
 
 # Make both SMAs the same length
 def balanceLengths(sma1, sma2):
-    sma1 = sma1 if len(sma1) <= len(sma2) else sma1[len(sma1)-len(sma2):]
-    sma2 = sma2 if len(sma2) <= len(sma1) else sma2[len(sma2)-len(sma1):]
+    sma1 = np.concatenate((np.array([np.nan]*(len(sma2)-len(sma1))),
+                          sma1)) if len(sma1) <= len(sma2) else sma1
+    sma2 = np.concatenate((np.array([np.nan]*(len(sma1)-len(sma2))),
+                          sma2)) if len(sma2) <= len(sma1) else sma2
     return sma1, sma2
 
 
@@ -39,6 +41,12 @@ def getCrossovers(sma1, sma2):
     arr1 = [arr[i]-arr[i+1] for i in range(len(arr)-1)]
     # Insert a non-crossover point at the first index
     arr1.insert(1, 0)
+
+    # Remove the first -1/1 that is caused by a nan value
+    for i in range(len(arr1)):
+        if arr1[i] != 0:
+            arr1[i] = 0
+            break
 
     return arr1
 
@@ -61,7 +69,7 @@ def getSMAPlots(closeData, window1, window2):
 
 
 # def main():
-#     df = pd.read_csv("PLTR.csv")  # this is received from API
+#     df = pd.read_csv("CSV files\PLTR.csv")  # this is received from API
 
 #     closeData = df["Close"]
 
@@ -69,17 +77,19 @@ def getSMAPlots(closeData, window1, window2):
 #     sma50 = getMovingAverage(closeData, 50)
 
 #     sma15, sma50 = balanceLengths(sma15, sma50)
+#     print(sma50)
+
 #     crossovers = getCrossovers(sma15, sma50)
 
-#     # fig, ax = plt.subplots()
-#     # ax.plot(range(len(sma15)), sma15, label='sma15')
-#     # ax.plot(range(len(sma15)), sma50, label='sma50')
-#     # ax.plot(range(len(sma15)), crossovers, label='cross')
+#     fig, ax = plt.subplots()
+#     ax.plot(range(len(sma15)), sma15, label='sma15')
+#     ax.plot(range(len(sma15)), sma50, label='sma50')
+#     ax.plot(range(len(sma15)), crossovers, label='cross')
 
-#     # ax.set_xlabel('days')
-#     # ax.set_ylabel('price')
-#     # ax.legend()
+#     ax.set_xlabel('days')
+#     ax.set_ylabel('price')
+#     ax.legend()
 
 
-if __name__ == "__main__":
-    main()
+# if __name__ == "__main__":
+#     main()
