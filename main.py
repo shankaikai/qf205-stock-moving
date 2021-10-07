@@ -55,7 +55,7 @@ class Main(QMainWindow, Ui_MainWindow):
         # Data from CSV parsing
         self.y = [random.randint(0, 300) for i in range(5)]  # placeholder
         self.x = ["Jan", "Feb", "Mar", "April", "May"]  # placeholder
-        
+
         self.show()
 
     # When the Update Window button is clicked
@@ -63,7 +63,7 @@ class Main(QMainWindow, Ui_MainWindow):
 
         # TODO: assign close data to self.closeData
         df = pd.read_csv("PLTR.csv")  # placeholder
-        df.rename(columns={'Adj Close':'Adj_Close'}, inplace=True)
+        df.rename(columns={'Adj Close': 'Adj_Close'}, inplace=True)
         self.closeData = df["Close"]  # placeholder
 
         sma1, sma2, crossBuy, crossSell = SMA.getSMAPlots(
@@ -86,21 +86,25 @@ class Main(QMainWindow, Ui_MainWindow):
         self.MplWidget.canvas.axes.plot(self.x, self.y)
 
         if self.sma1CheckBox.isChecked():
-            self.MplWidget.canvas.axes.plot(self.x, rolling_mean, label='15 Day SMA', color='orange')  # placeholder
+            self.MplWidget.canvas.axes.plot(
+                self.x, rolling_mean, label='15 Day SMA', color='orange')  # placeholder
 
         if self.sma2CheckBox.isChecked():
-            self.MplWidget.canvas.axes.plot(self.x, rolling_mean2, label='50 Day SMA', color='magenta')  # placeholder
+            self.MplWidget.canvas.axes.plot(
+                self.x, rolling_mean2, label='50 Day SMA', color='magenta')  # placeholder
 
         if self.sma1CheckBox.isChecked() and self.sma2CheckBox.isChecked():
-            #self.MplWidget.canvas.axes.plot(self.x, crossBuy)
-            #self.MplWidget.canvas.axes.plot(self.x, crossSell)
+            self.MplWidget.canvas.axes.plot(self.x, crossBuy)
+            self.MplWidget.canvas.axes.plot(self.x, crossSell)
             buy_idx = [i for i, e in enumerate(crossBuy) if e == 1]
             for i in buy_idx:
-                self.MplWidget.canvas.axes.plot(self.x[i], rolling_mean[i], 'go')
-            
+                self.MplWidget.canvas.axes.plot(
+                    self.x[i], rolling_mean[i], 'go')
+
             sell_idx = [i for i, e in enumerate(crossSell) if e == -1]
             for i in sell_idx:
-                self.MplWidget.canvas.axes.plot(self.x[i], rolling_mean[i], 'ro')
+                self.MplWidget.canvas.axes.plot(
+                    self.x[i], rolling_mean[i], 'ro')
 
         self.MplWidget.canvas.axes.legend(('Close', self.sma1Input.text(
         ) + 'd', self.sma2Input.text() + 'd'), loc='upper right')
@@ -141,7 +145,7 @@ class Main(QMainWindow, Ui_MainWindow):
         print(y)
 
         # TODO: Set the start and end date of the CSV
-        self.dateRangeInput.setText('insert date here') #placeholder
+        self.dateRangeInput.setText('insert date here')  # placeholder
 
         # TODO: Populate startDateCombo and endDateCombo
         self.startDateCombo.addItem('date')
