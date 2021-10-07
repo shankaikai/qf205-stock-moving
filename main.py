@@ -130,27 +130,26 @@ class Main(QMainWindow, Ui_MainWindow):
 
         fileName = self.fileNameInput.text()
 
-        if self.fileNameInput.text():
-            df = pd.read_csv(fileName)
-            y = df["Adj Close"]
-            x = df["Date"]
+        try:
+            if self.fileNameInput.text():
+                df = pd.read_csv(fileName)
+                y = df["Adj Close"]
+                x = df["Date"]
+                
+                startDate = x.iloc[0]
+                endDate = x.iloc[-1]
+                
+                self.dateRangeInput.setText(str(startDate) + ' to ' + str(endDate))
+                
+                self.startDateCombo.addItems(x)
+                self.endDateCombo.addItems(x)
+                self.endDateCombo.setCurrentIndex(len(x) - 1)
+                
+                self.y = y
+                self.x = x
+        except:
+            print("Error!")
             
-            startDate = x.iloc[0]
-            endDate = x.iloc[-1]
-            
-            self.dateRangeInput.setText(str(startDate) + ' to ' + str(endDate))
-            
-            
-            self.startDateCombo.addItems(x)
-            self.endDateCombo.addItems(x)
-            self.endDateCombo.setCurrentIndex(len(x) - 1)
-            
-            self.y = y
-            self.x = x
-
-            
-
-
         self.updateChart()
 
 
