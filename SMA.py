@@ -30,7 +30,8 @@ def getCrossovers(sma1, sma2):
     # it indicates that SM1 is above SMA2 (1), and vice versa (0)
     # resulting arr is a sequence of 0's and 1's
     diff = sma1-sma2
-    arr = [1 if x >= 0 else 0 for x in diff]
+    # arr = [1 if x >= 0 else 0 for x in diff]
+    arr = list(map(lambda x: 1 if x >= 0 else 0, diff))
 
     # ax.plot(range(len(sma15)), arr, label='arr')
 
