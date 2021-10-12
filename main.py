@@ -157,10 +157,9 @@ class Main(QMainWindow, Ui_MainWindow):
     # Parse csv and pass data into x data and y data and plot initiate graph
     def loadCsv(self):
 
-        fileName = self.fileNameInput.text()
-
         try:
             if self.fileNameInput.text():
+                fileName = self.fileNameInput.text()
                 df = pd.read_csv(fileName)
                 y = df["Adj Close"]
                 x = df["Date"]
