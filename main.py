@@ -87,9 +87,12 @@ class Main(QMainWindow, Ui_MainWindow):
 
         # check that the end date is larger than the start date
         if endIdx < startIdx:
-            print('End date should be later than start date')
+            self.errorMessage.setText('End date should be later than start date.')
         
         else:
+            # remove error message
+            self.errorMessage.setText('')
+
             # slice the required data based on date range
             xDataToPlot = self.dateRange[startIdx:endIdx+1]
             yDataToPlot = self.y[startIdx:endIdx+1]
@@ -108,8 +111,6 @@ class Main(QMainWindow, Ui_MainWindow):
 
             # rolling_mean = df.Adj_Close.rolling(window=15).mean()
             # rolling_mean2 = df.Adj_Close.rolling(window=50).mean()
-
-            # TODO: put sma1, sma2, crossBuy, crossSell into graph
 
             self.MplWidget.canvas.axes.clear()
             self.MplWidget.canvas.axes.plot(xDataToPlot, yDataToPlot)
@@ -178,10 +179,14 @@ class Main(QMainWindow, Ui_MainWindow):
                 
                 self.y = y
                 self.x = x
+
+                # update chart if there is a valid file
+                self.updateChart()
+            else:
+                self.errorMessage.setText("Please input a file path before clicking the 'Load CSV' button.")
         except:
-            print("Error!")
+            self.errorMessage.setText("Error loading the file. Please input the file path again.")
             
-        self.updateChart()
 
 
 if __name__ == "__main__":
