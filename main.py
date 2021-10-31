@@ -17,27 +17,6 @@ matplotlib.use('Qt5Agg')
 qtCreatorFile = "gui.ui"
 Ui_MainWindow, QtBaseClass = uic.loadUiType(qtCreatorFile)
 
-### NOTES FOR REFERENCE ###
-'''
-Object names:
-fileNameInput
-dateRangeInput
-loadCsvButton
-startDateCombo
-endDateCombo
-sma1CheckBox
-sma2CheckBox
-sma1Input
-sma2Input
-updateButton
-
-Grab text e.g. self.fileNameInput.text()
-Grab checkbox e.g. self.sma1CheckBox.isChecked()
-Add item to combo box (dropdown) e.g. self.startDateCombo.addItem('11/10/2020')
-Get text from combo box e.g. self.startDateCombo.currentText()
-'''
-
-
 class Main(QMainWindow, Ui_MainWindow):
     def __init__(self):
         super().__init__()
@@ -160,7 +139,9 @@ class Main(QMainWindow, Ui_MainWindow):
         try:
             if self.fileNameInput.text():
                 fileName = self.fileNameInput.text()
+                
                 df = pd.read_csv(fileName)
+                
                 y = df["Adj Close"]
                 x = df["Date"]
                 
