@@ -234,7 +234,7 @@ font-weight: bold;
            <widget class="QComboBox" name="startDateCombo">
             <property name="minimumSize">
              <size>
-              <width>100</width>
+              <width>300</width>
               <height>30</height>
              </size>
             </property>

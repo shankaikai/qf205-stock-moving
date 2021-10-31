@@ -162,6 +162,10 @@ class Main(QMainWindow, Ui_MainWindow):
 
                 # update chart if there is a valid file
                 self.updateChart()
+
+                # remove error message if any
+                self.errorMessage.setText("")
+
             else:
                 self.errorMessage.setText("Please input a file path before clicking the 'Load CSV' button.")
         except:
