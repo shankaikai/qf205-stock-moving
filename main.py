@@ -2,7 +2,6 @@ import SMA
 from datetime import datetime
 import csv
 import random
-import datetime as dt
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 import sys
@@ -175,7 +174,7 @@ class Main(QMainWindow, Ui_MainWindow):
                 self.endDateCombo.setCurrentIndex(len(x) - 1)
 
                 # convert date string to datetime
-                self.dateRange = [dt.datetime.strptime(date, '%Y-%m-%d').date() for date in x]
+                self.dateRange = [datetime.strptime(date, '%Y-%m-%d').date() for date in x]
                 
                 self.y = y
                 self.x = x
