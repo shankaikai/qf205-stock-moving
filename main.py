@@ -79,31 +79,18 @@ class Main(QMainWindow, Ui_MainWindow):
             crossBuy = crossBuy[startIdx:endIdx+1]
             crossSell = crossSell[startIdx:endIdx+1]
 
-            # crossBuy = [0]*(len(self.x) - len(crossBuy)) + crossBuy
-            # crossSell = [0]*(len(self.x) - len(crossSell)) + crossSell
-
-            # sma1 and sma2 are already the same size
-            # crossBuy is an array of 0s and 1s, 1 is the point to buy
-            # crossSell is an array of 0s and -1s, -1 is the point to sell
-            # print(crossBuy, crossSell)
-
-            # rolling_mean = df.Adj_Close.rolling(window=15).mean()
-            # rolling_mean2 = df.Adj_Close.rolling(window=50).mean()
-
             self.MplWidget.canvas.axes.clear()
             self.MplWidget.canvas.axes.plot(xDataToPlot, yDataToPlot)
 
             if self.sma1CheckBox.isChecked():
                 self.MplWidget.canvas.axes.plot(
-                    xDataToPlot, sma1, label='15 Day SMA', color='orange')  # placeholder
+                    xDataToPlot, sma1, label= self.sma1Input.text() + ' Day SMA', color='orange') 
 
             if self.sma2CheckBox.isChecked():
                 self.MplWidget.canvas.axes.plot(
-                    xDataToPlot, sma2, label='50 Day SMA', color='magenta')  # placeholder
-
+                    xDataToPlot, sma2, label= self.sma2Input.text() + ' Day SMA', color='magenta')  
+                
             if self.sma1CheckBox.isChecked() and self.sma2CheckBox.isChecked():
-                # self.MplWidget.canvas.axes.plot(xDataToPlot, crossBuy)
-                # self.MplWidget.canvas.axes.plot(xDataToPlot, crossSell)
                 buy_idx = [i for i, e in enumerate(crossBuy) if e == 1]
                 for i in buy_idx:
                     self.MplWidget.canvas.axes.plot(
