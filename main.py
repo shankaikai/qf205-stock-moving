@@ -11,7 +11,6 @@ from PyQt5 import uic
 import matplotlib
 import matplotlib.dates as mdates
 import pandas as pd
-import numpy as np
 matplotlib.use('Qt5Agg')
 
 qtCreatorFile = "gui.ui"
