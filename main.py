@@ -2,7 +2,6 @@ import SMA
 from datetime import datetime
 import csv
 import random
-import datetime as dt
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 import sys
@@ -12,32 +11,10 @@ from PyQt5 import uic
 import matplotlib
 import matplotlib.dates as mdates
 import pandas as pd
-import numpy as np
 matplotlib.use('Qt5Agg')
 
 qtCreatorFile = "gui.ui"
 Ui_MainWindow, QtBaseClass = uic.loadUiType(qtCreatorFile)
-
-### NOTES FOR REFERENCE ###
-'''
-Object names:
-fileNameInput
-dateRangeInput
-loadCsvButton
-startDateCombo
-endDateCombo
-sma1CheckBox
-sma2CheckBox
-sma1Input
-sma2Input
-updateButton
-
-Grab text e.g. self.fileNameInput.text()
-Grab checkbox e.g. self.sma1CheckBox.isChecked()
-Add item to combo box (dropdown) e.g. self.startDateCombo.addItem('11/10/2020')
-Get text from combo box e.g. self.startDateCombo.currentText()
-'''
-
 
 class Main(QMainWindow, Ui_MainWindow):
     def __init__(self):
@@ -87,9 +64,12 @@ class Main(QMainWindow, Ui_MainWindow):
 
         # check that the end date is larger than the start date
         if endIdx < startIdx:
-            print('End date should be later than start date')
+            self.errorMessage.setText('End date should be later than start date.')
         
         else:
+            # remove error message
+            self.errorMessage.setText('')
+
             # slice the required data based on date range
             xDataToPlot = self.dateRange[startIdx:endIdx+1]
             yDataToPlot = self.y[startIdx:endIdx+1]
@@ -98,33 +78,18 @@ class Main(QMainWindow, Ui_MainWindow):
             crossBuy = crossBuy[startIdx:endIdx+1]
             crossSell = crossSell[startIdx:endIdx+1]
 
-            # crossBuy = [0]*(len(self.x) - len(crossBuy)) + crossBuy
-            # crossSell = [0]*(len(self.x) - len(crossSell)) + crossSell
-
-            # sma1 and sma2 are already the same size
-            # crossBuy is an array of 0s and 1s, 1 is the point to buy
-            # crossSell is an array of 0s and -1s, -1 is the point to sell
-            # print(crossBuy, crossSell)
-
-            # rolling_mean = df.Adj_Close.rolling(window=15).mean()
-            # rolling_mean2 = df.Adj_Close.rolling(window=50).mean()
-
-            # TODO: put sma1, sma2, crossBuy, crossSell into graph
-
             self.MplWidget.canvas.axes.clear()
             self.MplWidget.canvas.axes.plot(xDataToPlot, yDataToPlot)
 
             if self.sma1CheckBox.isChecked():
                 self.MplWidget.canvas.axes.plot(
-                    xDataToPlot, sma1, label='15 Day SMA', color='orange')  # placeholder
+                    xDataToPlot, sma1, label= self.sma1Input.text() + ' Day SMA', color='orange') 
 
             if self.sma2CheckBox.isChecked():
                 self.MplWidget.canvas.axes.plot(
-                    xDataToPlot, sma2, label='50 Day SMA', color='magenta')  # placeholder
-
+                    xDataToPlot, sma2, label= self.sma2Input.text() + ' Day SMA', color='magenta')  
+                
             if self.sma1CheckBox.isChecked() and self.sma2CheckBox.isChecked():
-                # self.MplWidget.canvas.axes.plot(xDataToPlot, crossBuy)
-                # self.MplWidget.canvas.axes.plot(xDataToPlot, crossSell)
                 buy_idx = [i for i, e in enumerate(crossBuy) if e == 1]
                 for i in buy_idx:
                     self.MplWidget.canvas.axes.plot(
@@ -157,11 +122,12 @@ class Main(QMainWindow, Ui_MainWindow):
     # Parse csv and pass data into x data and y data and plot initiate graph
     def loadCsv(self):
 
-        fileName = self.fileNameInput.text()
-
         try:
             if self.fileNameInput.text():
+                fileName = self.fileNameInput.text()
+                
                 df = pd.read_csv(fileName)
+                
                 y = df["Adj Close"]
                 x = df["Date"]
                 
@@ -175,14 +141,22 @@ class Main(QMainWindow, Ui_MainWindow):
                 self.endDateCombo.setCurrentIndex(len(x) - 1)
 
                 # convert date string to datetime
-                self.dateRange = [dt.datetime.strptime(date, '%Y-%m-%d').date() for date in x]
+                self.dateRange = [datetime.strptime(date, '%Y-%m-%d').date() for date in x]
                 
                 self.y = y
                 self.x = x
+
+                # update chart if there is a valid file
+                self.updateChart()
+
+                # remove error message if any
+                self.errorMessage.setText("")
+
+            else:
+                self.errorMessage.setText("Please input a file path before clicking the 'Load CSV' button.")
         except:
-            print("Error!")
+            self.errorMessage.setText("Error loading the file. Please input the file path again.")
             
-        self.updateChart()
 
 
 if __name__ == "__main__":

@@ -1,12 +1,4 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Tue Oct  5 16:25:16 2021
-
-@author: tanka
-"""
-
 import numpy as np
-import pandas as pd
 import matplotlib.pyplot as plt
 
 
@@ -74,30 +66,3 @@ def getSMAPlots(closeData, window1, window2):
         crossSell = [1 if x == 1 else 0 for x in crossovers]
         crossBuy = [-1 if x == -1 else 0 for x in crossovers]
     return sma1, sma2, crossBuy, crossSell
-
-
-# def main():
-#     df = pd.read_csv("CSV files\PLTR.csv")  # this is received from API
-
-#     closeData = df["Close"]
-
-#     sma15 = getMovingAverage(closeData, 15)
-#     sma50 = getMovingAverage(closeData, 50)
-
-#     sma15, sma50 = balanceLengths(sma15, sma50)
-#     print(sma50)
-
-#     crossovers = getCrossovers(sma15, sma50)
-
-#     fig, ax = plt.subplots()
-#     ax.plot(range(len(sma15)), sma15, label='sma15')
-#     ax.plot(range(len(sma15)), sma50, label='sma50')
-#     ax.plot(range(len(sma15)), crossovers, label='cross')
-
-#     ax.set_xlabel('days')
-#     ax.set_ylabel('price')
-#     ax.legend()
-
-
-# if __name__ == "__main__":
-#     main()
