@@ -1,7 +1,5 @@
 import SMA
 from datetime import datetime
-import csv
-import random
 import sys
 from PyQt5.QtWidgets import QMainWindow, QApplication, QVBoxLayout
 from PyQt5.QtGui import QIcon
@@ -152,8 +150,6 @@ class Main(QMainWindow, Ui_MainWindow):
         except:
             self.errorMessage.setText("Error loading the file. Please input the file path again.")
             
-
-
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     main = Main()
