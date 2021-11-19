@@ -2,13 +2,10 @@ import SMA
 from datetime import datetime
 import csv
 import random
-from matplotlib.figure import Figure
-from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 import sys
 from PyQt5.QtWidgets import QMainWindow, QApplication, QVBoxLayout
 from PyQt5.QtGui import QIcon
 from PyQt5 import uic
-import matplotlib
 import matplotlib.dates as mdates
 import pandas as pd
 matplotlib.use('Qt5Agg')
@@ -40,8 +37,6 @@ class Main(QMainWindow, Ui_MainWindow):
 
     # When the Update Window button is clicked
     def updateChart(self):
-
-        # df.rename(columns={'Adj Close': 'Adj_Close'}, inplace=True)
 
         sma1, sma2, crossBuy, crossSell = SMA.getSMAPlots(
             self.y, int(self.sma1Input.text()), int(self.sma2Input.text()))
